@@ -6,7 +6,13 @@
         <img src="./logo2.jpg" alt />
       </div>
       <!-- 登录表单区域 -->
-      <el-form ref="loginRef" :model="login" label-width="0px" class="login_form" :rules="loginRules">
+      <el-form
+        ref="loginRef"
+        :model="login"
+        label-width="0px"
+        class="login_form"
+        :rules="loginRules"
+      >
         <!-- 用户名 -->
         <el-form-item prop="username">
           <el-input v-model="login.username" prefix-icon="iconfont icon-user" autofocus="true"></el-input>
@@ -17,7 +23,7 @@
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
-          <el-button type="primary">登录</el-button>
+          <el-button type="primary" @click="toLogin">登录</el-button>
           <el-button type="info" @click="resetLogin">重置</el-button>
         </el-form-item>
       </el-form>
@@ -42,17 +48,31 @@ export default {
       ]
     }
   }),
-  methods:{
-    resetLogin(){
+  methods: {
+    resetLogin() {
       this.$refs.loginRef.resetFields();
-      this.login.username = this.login.password = '';
+      this.login.username = this.login.password = "";
+    },
+    toLogin() {
+      this.$refs.loginRef.validate(async valid => {
+        if (!valid) return;
+        const {
+          data: { data, meta }
+        } = await this.$http.post("login", this.login);
+        //  console.log(meta);
+        if (meta.status !== 200) return this.$Message.error("登录失败！");
+        this.$Message.success("登陆成功！");
+        sessionStorage.setItem('token',data.token)
+        this.$router.push('/home')
+      });
     }
   }
 };
 </script>
 <style lang="less" scoped>
 .login {
-  background-color: #2b4b6b;
+  // background-color: #2b4b6b;
+  background: url("./bg.jpg"), no-repeat;
   height: 100%;
 
   .login_box {

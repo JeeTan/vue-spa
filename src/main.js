@@ -1,10 +1,15 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import './assets/css/global.less'
-import './assets/fonts/iconfont.css'
 
+//引入公共样式
+import './assets/css/global.less'
+//引入字体图标库
+import './assets/fonts/iconfont.css'
+//引入element-ui
 import './plugins/element.js'
+//引入axios
+import './api'
 
 Vue.config.productionTip = false
 
